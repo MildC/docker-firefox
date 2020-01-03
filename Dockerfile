@@ -11,7 +11,7 @@ FROM jlesage/baseimage-gui:alpine-3.10-v3.5.3
 ARG DOCKER_IMAGE_VERSION=unknown
 
 # Define software versions.
-ARG FIREFOX_VERSION=71.0-r0
+ARG FIREFOX_VERSION=71.0-r1
 ARG JSONLZ4_VERSION=c4305b8
 ARG LZ4_VERSION=1.8.1.2
 #ARG PROFILE_CLEANER_VERSION=2.36
@@ -23,6 +23,22 @@ ARG LZ4_URL=https://github.com/lz4/lz4/archive/v${LZ4_VERSION}.tar.gz
 
 # Define working directory.
 WORKDIR /tmp
+
+# Install language pack
+ENV MUSL_LOCPATH="/usr/share/i18n/locales/musl"
+
+# install libintl
+# then install dev dependencies for musl-locales
+# clone the sources
+# build and install musl-locales
+# remove sources and compile artifacts
+# lastly remove dev dependencies again
+RUN apk --no-cache add libintl && \
+        apk --no-cache --virtual .locale_build add cmake make musl-dev gcc gettext-dev git && \
+        git clone https://gitlab.com/rilian-la-te/musl-locales && \
+        cd musl-locales && cmake -DLOCALE_PROFILE=OFF -DCMAKE_INSTALL_PREFIX:PATH=/usr . && make && make install && \
+        cd .. && rm -r musl-locales && \
+        apk del .locale_build
 
 # Install JSONLZ4 tools.
 RUN \
