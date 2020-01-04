@@ -41,6 +41,16 @@ RUN cat /locale.md | xargs -i /usr/glibc-compat/bin/localedef -i {} -f UTF-8 {}.
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 
+# Add fonts
+RUN mkdir -p /usr/share/fonts/custom
+COPY fonts/* /usr/share/fonts/custom/
+# Install font-adobe-100dpi
+RUN \
+    apk add font-adobe-100dpi && \
+        chmod 777 /usr/share/fonts/custom/* && \
+        cd /usr/share/fonts && \
+        fc-cache -f
+
 # Install JSONLZ4 tools.
 RUN \
     add-pkg --virtual build-dependencies \
