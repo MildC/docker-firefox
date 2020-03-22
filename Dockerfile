@@ -11,7 +11,7 @@ FROM jlesage/baseimage-gui:alpine-3.10-v3.5.3
 ARG DOCKER_IMAGE_VERSION=unknown
 
 # Define software versions.
-ARG FIREFOX_VERSION=72.0.1-r0
+ARG FIREFOX_VERSION=74.0-r1
 ARG JSONLZ4_VERSION=c4305b8
 ARG LZ4_VERSION=1.8.1.2
 #ARG PROFILE_CLEANER_VERSION=2.36
@@ -27,10 +27,10 @@ WORKDIR /tmp
 # Install language pack
 RUN apk --no-cache add ca-certificates wget && \
         wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-        wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.25-r0/glibc-2.25-r0.apk && \
-        wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.25-r0/glibc-bin-2.25-r0.apk && \
-        wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.25-r0/glibc-i18n-2.25-r0.apk && \
-        apk add glibc-bin-2.25-r0.apk glibc-i18n-2.25-r0.apk glibc-2.25-r0.apk
+        wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.31-r0/glibc-2.31-r0.apk && \
+        wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.31-r0/glibc-bin-2.31-r0.apk && \
+        wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.31-r0/glibc-i18n-2.31-r0.apk && \
+        apk add glibc-bin-2.31-r0.apk glibc-i18n-2.31-r0.apk glibc-2.31-r0.apk
 
 # Iterate through all locale and install it
 # Note that locale -a is not available in alpine linux, use `/usr/glibc-compat/bin/locale -a` instead
@@ -77,7 +77,7 @@ RUN \
 # Install Firefox.
 RUN \
     add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
             --upgrade firefox=${FIREFOX_VERSION}
 
 # Install extra packages.
